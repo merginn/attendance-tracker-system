@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+</head>
+<body>
+    <h1>Admin Page</h1>
+    
+    <h2>Add Student</h2>
+    <form method="post">
+        <input type="text" name="student_id" placeholder="Enter Student ID" required>
+        <input type="text" name="student_name" placeholder="Enter Student Name" required>
+        <button type="submit">Add Student</button>
+    </form>
+
+    <h2>Marked Attendance</h2>
+    <form method="post" action="/mark_attendance">
+        <input type="text" name="user_id" placeholder="Enter User ID to Mark Attendance" required>
+        <button type="submit">Mark Attendance</button>
+    </form>
+    
+    <h3>Students:</h3>
+    <ul>
+        {% for id, student in students.items() %}
+            <li>{{ student.name }} (ID: {{ id }}) - {% if student.attendance %}Marked{% else %}Not Marked{% endif %}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">Back to Welcome Page</a>
+</body>
+</html>
