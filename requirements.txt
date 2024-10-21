@@ -10,7 +10,6 @@ click @ file:///home/linux1/recipes/ci/click_1610990599742/work
 conda==4.10.1
 conda-package-handling @ file:///tmp/build/80754af9/conda-package-handling_1603018141399/work
 cryptography @ file:///tmp/build/80754af9/cryptography_1605544487601/work
-customtkinter==5.2.2
 darkdetect==0.8.0
 emoji==2.14.0
 Flask @ file:///home/ktietz/src/ci/flask_1611932660458/work
