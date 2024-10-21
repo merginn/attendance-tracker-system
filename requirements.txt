@@ -1,31 +1,5 @@
-astroid==2.4.2
-attrs==20.3.0
-beautifulsoup4==4.12.2
-brotlipy==0.7.0
-certifi==2020.12.5
+Flask==2.0.1
 gunicorn==23.0.0
-darkdetect==0.8.0
-emoji==2.14.0
-Flask==2.0.1  # Ensure you specify a compatible Flask version
-idna==2.10
-importlib-metadata==8.5.0
-inflect==7.4.0
-isort==5.6.4
-jellyfish==0.11.2
-MarkupSafe==1.1.1
-more-itertools==10.5.0
-packaging==24.1
-pyfiglet==0.8.post1
-pylint==2.6.0
-PyYAML==5.4.1
+customtkinter  # If customtkinter is necessary
 requests==2.25.1
-ruamel-yaml==0.15.87
-six==1.15.0
-soupsieve==2.4.1
-termcolor==2.3.0
-tqdm==4.62.3
-typeguard==4.3.0
-typing-extensions==4.12.2
-Werkzeug==2.0.1  # Ensure you specify a compatible Werkzeug version
-wrapt==1.12.1
-zipp==3.20.2
+beautifulsoup4==4.12.2
