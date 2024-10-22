@@ -1,41 +1,40 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-
+from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Needed for session management
 
-students = {}
+class AttendanceSystem:
+    def __init__(self):
+        self.students = {}
+
+    def add_student(self, student_id, name):
+        if student_id not in self.students:
+            self.students[student_id] = {"name": name, "attendance": False}
+            return True
+        return False
+
+    def mark_attendance(self, student_id):
+        if student_id in self.students:
+            if not self.students[student_id]["attendance"]:
+                self.students[student_id]["attendance"] = True
+                return True
+        return False
+
+attendance_system = AttendanceSystem()
 
 @app.route('/')
-def welcome():
+def index():
     return render_template('index.html')
 
-@app.route('/admin', methods=['GET', 'POST'])
-def admin():
-    if request.method == 'POST':
-        student_id = request.form.get('student_id')
-        student_name = request.form.get('student_name')
-        if student_id and student_name:
-            if student_id not in students:
-                students[student_id] = {"name": student_name, "attendance": False}
-                flash(f'Student {student_name} added successfully!', 'success')
-            else:
-                flash('Student ID already exists!', 'error')
-        else:
-            flash('Please provide both Student ID and Name!', 'error')
-        return redirect(url_for('admin'))
-    return render_template('admin.html', students=students)
+@app.route('/add_student', methods=['POST'])
+def add_student():
+    data = request.get_json()
+    success = attendance_system.add_student(data['id'], data['name'])
+    return jsonify({"success": success})
 
 @app.route('/mark_attendance', methods=['POST'])
 def mark_attendance():
-    user_id = request.form.get('user_id')
-    if user_id in students and not students[user_id]["attendance"]:
-        students[user_id]["attendance"] = True
-        flash(f'Attendance marked for {students[user_id]["name"]}!', 'success')
-    return redirect(url_for('admin'))
+    data = request.get_json()
+    success = attendance_system.mark_attendance(data['id'])
+    return jsonify({"success": success})
 
-@app.route('/user')
-def user():
-    return render_template('user.html')
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
