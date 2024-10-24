@@ -1,41 +1,68 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Needed for session management
 
-students = {}
+# Sample data structure to hold student information
+students = []
 
 @app.route('/')
 def welcome():
-    return render_template('index.html')
+    return render_template('welcome.html')
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
-        student_id = request.form.get('student_id')
-        student_name = request.form.get('student_name')
-        if student_id and student_name:
-            if student_id not in students:
-                students[student_id] = {"name": student_name, "attendance": False}
-                flash(f'Student {student_name} added successfully!', 'success')
-            else:
-                flash('Student ID already exists!', 'error')
+        admin_id = request.form['admin_id']
+        password = request.form['password']
+        # Validate admin credentials (this is just an example)
+        if admin_id == 'admin' and password == 'password':
+            return redirect(url_for('admin_panel'))
         else:
-            flash('Please provide both Student ID and Name!', 'error')
-        return redirect(url_for('admin'))
-    return render_template('admin.html', students=students)
+            return "Invalid credentials", 403  # Return error if credentials are wrong
+    return render_template('admin_login.html')
 
-@app.route('/mark_attendance', methods=['POST'])
-def mark_attendance():
-    user_id = request.form.get('user_id')
-    if user_id in students and not students[user_id]["attendance"]:
-        students[user_id]["attendance"] = True
-        flash(f'Attendance marked for {students[user_id]["name"]}!', 'success')
-    return redirect(url_for('admin'))
+@app.route('/admin_panel')
+def admin_panel():
+    return render_template('admin_panel.html', students=students)
 
-@app.route('/user')
-def user():
-    return render_template('user.html')
+@app.route('/student', methods=['GET', 'POST'])
+def student():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        surname = request.form['surname']
+        group_id = request.form['group_id']
+        subject = request.form['subject']
 
-if __name__ == "__main__":
+        # Save the details, including the subject
+        new_student = {
+            'first_name': first_name,
+            'surname': surname,
+            'group_id': group_id,
+            'subject': subject
+        }
+        students.append(new_student)
+        return redirect(url_for('student_panel'))
+    return render_template('student_panel.html')
+
+@app.route('/student_panel')
+def student_panel():
+    return render_template('student_panel.html')
+
+@app.route('/submit_student_details', methods=['POST'])
+def submit_student_details():
+    first_name = request.form['first_name']
+    surname = request.form['surname']
+    group_id = request.form['group_id']
+    subject = request.form['subject']
+
+    new_student = {
+        'first_name': first_name,
+        'surname': surname,
+        'group_id': group_id,
+        'subject': subject
+    }
+    students.append(new_student)
+    return redirect(url_for('student_panel'))
+
+if __name__ == '__main__':
     app.run(debug=True)
